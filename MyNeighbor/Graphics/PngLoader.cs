@@ -8,7 +8,6 @@ using SixLabors.ImageSharp.Processing;
 
 namespace MyNeighbor
 {
-	//TODO: Refactor to clean up repeated code
 	public static class PngLoader
 	{
 		static int MAX_BACKGROUND_HEIGHT = 44;
@@ -20,39 +19,21 @@ namespace MyNeighbor
 
 		public static int[,] LoadBackground(string filename)
 		{
-			int[,] pixelLuminance = new int[MAX_BACKGROUND_HEIGHT, MAX_BACKGROUND_WIDTH];
-
 			if (File.Exists(filename))
 			{
 				using Image<L8> backgroundImage = Image.Load<L8>(filename);
 
 				if (backgroundImage.Height <= MAX_BACKGROUND_HEIGHT || backgroundImage.Width <= MAX_BACKGROUND_WIDTH)
 				{
-					//Grab the luminance values of each pixel in our image
-					backgroundImage.ProcessPixelRows(accessor =>
-					{
-						for (int y = 0; y < accessor.Height; y++)
-						{
-							Span<L8> pixelRow = accessor.GetRowSpan(y);
-
-							for (int x = 0; x < pixelRow.Length; x++)
-							{
-								ref L8 pixel = ref pixelRow[x];
-
-								pixelLuminance[y, x] = pixel.PackedValue;
-							}
-						}
-					});
+					return GetPixelLuminance(backgroundImage, MAX_BACKGROUND_HEIGHT, MAX_BACKGROUND_WIDTH);
 				}
 				else
 				{
-					pixelLuminance = UnableToLoadImage.Background();
+					return UnableToLoadImage.Background();
 				}
 			}
 			else
-				pixelLuminance = UnableToLoadImage.Background();
-
-			return pixelLuminance;
+				return UnableToLoadImage.Background();
 		}
 
 		public static int[,] LoadOverlay(string filename)
@@ -61,72 +42,62 @@ namespace MyNeighbor
 
 			if (File.Exists(filename))
 			{
-				using Image<L8> backgroundImage = Image.Load<L8>(filename);
+				using Image<L8> overlayImage = Image.Load<L8>(filename);
 
-				if (backgroundImage.Height <= MAX_OVERLAY_HEIGHT || backgroundImage.Width <= MAX_OVERLAY_WIDTH)
+				if (overlayImage.Height <= MAX_OVERLAY_HEIGHT || overlayImage.Width <= MAX_OVERLAY_WIDTH)
 				{
-					//Grab the luminance values of each pixel in our image
-					backgroundImage.ProcessPixelRows(accessor =>
-					{
-						for (int y = 0; y < accessor.Height; y++)
-						{
-							Span<L8> pixelRow = accessor.GetRowSpan(y);
-
-							for (int x = 0; x < pixelRow.Length; x++)
-							{
-								ref L8 pixel = ref pixelRow[x];
-
-								pixelLuminance[y, x] = pixel.PackedValue;
-							}
-						}
-					});
+					return GetPixelLuminance(overlayImage, MAX_OVERLAY_WIDTH, MAX_OVERLAY_HEIGHT);
 				}
 				else
 				{
-					pixelLuminance = UnableToLoadImage.Overlay();
+					return UnableToLoadImage.Overlay();
 				}
 			}
 			else
-				pixelLuminance = UnableToLoadImage.Overlay();
-
-			return pixelLuminance;
+				return UnableToLoadImage.Overlay();
 		}
 
 		public static int[,] LoadUI(string filename)
 		{
-			int[,] pixelLuminance = new int[MAX_UI_HEIGHT, MAX_UI_WIDTH];
-
 			if (File.Exists(filename))
 			{
-				using Image<L8> backgroundImage = Image.Load<L8>(filename);
+				using Image<L8> uiImage = Image.Load<L8>(filename);
 
-				if (backgroundImage.Height <= MAX_UI_HEIGHT || backgroundImage.Width <= MAX_UI_WIDTH)
+				if (uiImage.Height <= MAX_UI_HEIGHT || uiImage.Width <= MAX_UI_WIDTH)
 				{
-					//Grab the luminance values of each pixel in our image
-					backgroundImage.ProcessPixelRows(accessor =>
-					{
-						for (int y = 0; y < accessor.Height; y++)
-						{
-							Span<L8> pixelRow = accessor.GetRowSpan(y);
-
-							for (int x = 0; x < pixelRow.Length; x++)
-							{
-								ref L8 pixel = ref pixelRow[x];
-
-								pixelLuminance[y, x] = pixel.PackedValue;
-							}
-						}
-					});
+					return GetPixelLuminance(uiImage, MAX_UI_HEIGHT, MAX_UI_WIDTH);
 				}
 				else
 				{
-					pixelLuminance = UnableToLoadImage.Overlay(); //TODO: Make specific error output
+					return UnableToLoadImage.Overlay(); //TODO: Make specific error output
 				}
 			}
 			else
-				pixelLuminance = UnableToLoadImage.Overlay(); //TODO: Make specific error output
+				return UnableToLoadImage.Overlay(); //TODO: Make specific error output
 
-			return pixelLuminance;
+		}
+
+		private static int[,] GetPixelLuminance(Image<L8> image, int y, int x)
+		{
+			int[,] luminance = new int[y,x];
+
+			//Grab the luminance values of each pixel in our image
+			image.ProcessPixelRows(accessor =>
+			{
+				for (int y = 0; y < accessor.Height; y++)
+				{
+					Span<L8> pixelRow = accessor.GetRowSpan(y);
+
+					for (int x = 0; x < pixelRow.Length; x++)
+					{
+						ref L8 pixel = ref pixelRow[x];
+
+						luminance[y, x] = pixel.PackedValue;
+					}
+				}
+			});
+
+			return luminance;
 		}
 	}
 }

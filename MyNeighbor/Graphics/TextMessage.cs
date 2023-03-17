@@ -7,6 +7,9 @@ namespace MyNeighbor
 	class TextMessage
 	{
 		static int MAX_CHARACTERS_PER_LINE = 110;
+		const int USER_INTERFACE_AREA_X = 8;
+		const int USER_INTERFACE_AREA_Y = 48;
+
 		private string _message;
 		private int _positionX;
 		private int _positionY;
@@ -16,14 +19,14 @@ namespace MyNeighbor
 		public int finalCursorPositionLeft;
 		public int finalCursorPositionTop;
 
-		public TextMessage( string message, int posX, int posY )
+		public TextMessage(string message, int posX = USER_INTERFACE_AREA_X, int posY = USER_INTERFACE_AREA_Y)
 		{
 			_message = message;
 			_positionX = posX;
 			_positionY = posY;
 		}
 
-		public void ChangeMessage( string message )
+		public void ChangeMessage(string message)
 		{
 			_message = message;
 		}
@@ -37,19 +40,14 @@ namespace MyNeighbor
 			Console.SetCursorPosition(_positionX, _positionY);
 			int lines = 0;
 
-			//Find how many lines we have
-			for (int i = 1; i < _message.Length; i++)
-			{
-				if (i == MAX_CHARACTERS_PER_LINE)
-					lines++;
-			}
-
 			for (int i = 0, j = MAX_CHARACTERS_PER_LINE; i < _message.Length; i++)
 			{				
 				if( i < j )
 					Console.Write(_message[i]);
 				else
 				{
+					++lines;
+
 					Console.Write("\n");
 					Console.SetCursorPosition( _positionX, _positionY + lines);
 					j += MAX_CHARACTERS_PER_LINE;

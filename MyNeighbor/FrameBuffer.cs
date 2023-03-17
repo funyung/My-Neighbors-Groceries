@@ -1,5 +1,5 @@
 ﻿/* Description:
- * Takes background and overlay grraphics, and outputs it to the console with a UI under it for questions and user input
+ * Takes background and overlay graphics, and outputs it to the console with a UI under it for questions and user input
  */
 using System;
 
@@ -15,7 +15,7 @@ namespace MyNeighbor
 
 		private Background currentBackground;
 		private ImageOverlay? currentOverlay;
-		private int[,] userInterfaceGraphic;
+		private int[,] userInterfaceBackground;
 
 		private TextMessage currentMessage;
 
@@ -28,10 +28,10 @@ namespace MyNeighbor
 		{
 			//Set Title Screen
 			currentBackground = new Background("gfx/0bg_title.png");
-			userInterfaceGraphic = PngLoader.LoadUI("gfx/0bg_ui.png");
+			userInterfaceBackground = PngLoader.LoadUI("gfx/0bg_ui.png");
 
 			//Testing TextMessage line length
-			currentMessage = new TextMessage("Have you seen my neighbor? It seems like they never bring in any groceries...1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111", 8, 48);
+			currentMessage = new TextMessage("Have you seen my neighbor? It seems like they never bring in any groceries...1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 
 			needsUpdate = true;
 
@@ -41,7 +41,7 @@ namespace MyNeighbor
 		{
 			Draw(currentBackground.GetImageData(), true);
 
-			Draw(userInterfaceGraphic, true);
+			Draw(userInterfaceBackground, true);
 
 			if (currentOverlay != null)
 			{
@@ -57,30 +57,30 @@ namespace MyNeighbor
 			needsUpdate = false;
 		}
 
-		public void SetBackground( Background background)
+		public void SetBackground(Background background)
 		{
 			currentBackground = background;
 			needsUpdate = true;
 		}
 
-		public void SetOverlay( ImageOverlay overlay)
+		public void SetOverlay(ImageOverlay overlay)
 		{
 			currentOverlay = overlay;
 			needsUpdate = true;
 		}
 
-		public void SetUI( int[,] ui )
+		public void SetUI(int[,] ui)
 		{
-			userInterfaceGraphic= ui;
+			userInterfaceBackground= ui;
 			needsUpdate = true;
 		}
 
-		public void SetMessage( string message )
+		public void SetMessage(string message)
 		{
 			currentMessage.ChangeMessage(message);
 		}
 
-		public void Draw( int[,] imageData, bool consecutiveOutput, int x = 0, int y = 0 )
+		public void Draw(int[,] imageData, bool consecutiveOutput, int x = 0, int y = 0)
 		{
 			for (int h = 0; h < imageData.GetLength(0); h++)
 			{
