@@ -4,7 +4,7 @@
 
 namespace MyNeighbor
 {
-	public class ImageOverlay
+	public class Overlay
 	{
 		private int[,] _imageData = new int[24, 10];
 		private int _positionX;
@@ -12,7 +12,7 @@ namespace MyNeighbor
 
 		public bool HasBeenDrawn;
 
-		public ImageOverlay(string filename, int posX, int posY)
+		public Overlay(string filename, int posX, int posY)
 		{
 			_imageData = PngLoader.LoadOverlay(filename);
 			_positionX = posX;

@@ -1,10 +1,8 @@
 ﻿/* Description:
  * Utilizes ImageSharp to processes loaded PNG files into integer arrays and creates an IDrawable element with it
  */
-using System;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 
 namespace MyNeighbor
 {
@@ -69,11 +67,11 @@ namespace MyNeighbor
 				}
 				else
 				{
-					return UnableToLoadImage.Overlay(); //TODO: Make specific error output
+					return new int[MAX_UI_HEIGHT, MAX_UI_WIDTH];//Return blank to not obstruct view
 				}
 			}
 			else
-				return UnableToLoadImage.Overlay(); //TODO: Make specific error output
+				return new int[MAX_UI_HEIGHT, MAX_UI_WIDTH]; //Return blank to not obstruct view
 
 		}
 

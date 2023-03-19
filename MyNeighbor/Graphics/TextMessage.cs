@@ -7,23 +7,23 @@ namespace MyNeighbor
 	class TextMessage
 	{
 		static int MAX_CHARACTERS_PER_LINE = 110;
-		const int USER_INTERFACE_AREA_X = 8;
-		const int USER_INTERFACE_AREA_Y = 48;
 
 		private string _message;
+		private string[] _words;
+
 		private int _positionX;
 		private int _positionY;
+
 		private ConsoleColor _originalBackgroundColor;
 		private ConsoleColor _originalForegroundColor;
-		
-		public int finalCursorPositionLeft;
-		public int finalCursorPositionTop;
+		public int finalCursorPositionY;
 
-		public TextMessage(string message, int posX = USER_INTERFACE_AREA_X, int posY = USER_INTERFACE_AREA_Y)
+		public TextMessage(string message, int posX = FrameBuffer.USER_INTERFACE_ORIGIN_X, int posY = FrameBuffer.USER_INTERFACE_ORIGIN_Y)
 		{
 			_message = message;
-			_positionX = posX;
+			_words = _message.Split(' ');
 			_positionY = posY;
+			_positionX = posX;
 		}
 
 		public void ChangeMessage(string message)
@@ -31,29 +31,56 @@ namespace MyNeighbor
 			_message = message;
 		}
 
+		public int GetCursorPosition()
+		{
+			return finalCursorPositionY;
+		}
+
 		public void Write()
+		{
+			SetColors();
+			Console.SetCursorPosition(_positionX, _positionY);
+
+			int lines = 0;
+			int lineLength = 0;
+
+			foreach( var word in _words )
+			{
+				lineLength += word.Length + 1;
+
+				if ( lineLength < MAX_CHARACTERS_PER_LINE)
+				{
+					Console.Write(word);
+
+					if( word != _words.Last())
+						Console.Write(" ");
+				}
+				else
+				{
+					++lines;
+					Console.Write("\n");
+					Console.SetCursorPosition(_positionX, _positionY + lines);
+					Console.Write(word);
+					Console.Write(" ");
+					lineLength = word.Length;
+				}
+			}
+
+			finalCursorPositionY = _positionY + lines;
+
+			ResetColors();
+		}
+
+		private void SetColors()
 		{
 			_originalBackgroundColor = Console.BackgroundColor;
 			_originalForegroundColor = Console.ForegroundColor;
 			Console.BackgroundColor = ConsoleColor.Black;
 			Console.ForegroundColor = ConsoleColor.White;
-			Console.SetCursorPosition(_positionX, _positionY);
-			int lines = 0;
+		}
 
-			for (int i = 0, j = MAX_CHARACTERS_PER_LINE; i < _message.Length; i++)
-			{				
-				if( i < j )
-					Console.Write(_message[i]);
-				else
-				{
-					++lines;
-
-					Console.Write("\n");
-					Console.SetCursorPosition( _positionX, _positionY + lines);
-					j += MAX_CHARACTERS_PER_LINE;
-				}
-			}
-
+		private void ResetColors()
+		{
 			Console.BackgroundColor = _originalBackgroundColor;
 			Console.ForegroundColor = _originalForegroundColor;
 		}

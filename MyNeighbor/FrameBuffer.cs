@@ -1,8 +1,6 @@
 ﻿/* Description:
  * Takes background and overlay graphics, and outputs it to the console with a UI under it for questions and user input
  */
-using System;
-
 namespace MyNeighbor
 {
     public class FrameBuffer
@@ -13,11 +11,19 @@ namespace MyNeighbor
 		static string DarkGrey	= "▒▒";
 		static string Black		= "██";
 
-		private Background currentBackground;
-		private ImageOverlay? currentOverlay;
+		public const int MAX_SCREENSPACE_X = 128;
+		public const int MAX_SCREENSPACE_Y = 64;
+		public const int MAX_TEXT_OVERLAY_LENGTH = 32;
+		public const int USER_INTERFACE_ORIGIN_X = 8;
+		public const int USER_INTERFACE_ORIGIN_Y = 48;
+
+		private Background Background;
+		private Overlay? Overlay;
+		private List<TextMessage> TextOverlays;
 		private int[,] userInterfaceBackground;
 
 		private TextMessage currentMessage;
+		private int userCursorPosition;
 
 		private int lastCursorX;
 		private int lastCursorY;
@@ -27,11 +33,12 @@ namespace MyNeighbor
 		public FrameBuffer()
 		{
 			//Set Title Screen
-			currentBackground = new Background("gfx/0bg_title.png");
+			Background = new Background("gfx/0bg_title.png");
 			userInterfaceBackground = PngLoader.LoadUI("gfx/0bg_ui.png");
 
-			//Testing TextMessage line length
-			currentMessage = new TextMessage("Have you seen my neighbor? It seems like they never bring in any groceries...1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+			TextOverlays = new List<TextMessage>();
+
+			currentMessage = new TextMessage("Have you seen my neighbor? It seems like they never bring in any groceries... Have you seen my neighbor? It seems like they never bring in any groceries...  Have you seen my neighbor? It seems like they never bring in any groceries...  Have you seen my neighbor? It seems like they never bring in any groceries... ");
 
 			needsUpdate = true;
 
@@ -39,33 +46,37 @@ namespace MyNeighbor
 
 		public void OutputImage()
 		{
-			Draw(currentBackground.GetImageData(), true);
+			Draw(Background.GetImageData(), true);
 
 			Draw(userInterfaceBackground, true);
 
-			if (currentOverlay != null)
+			if (Overlay != null)
 			{
-				Draw(currentOverlay.GetImageData(), false, currentOverlay.GetPositionX(), currentOverlay.GetPositionY());
-				currentOverlay.HasBeenDrawn= true; //TODO: Will not work on multiple draws of the same frame
+				Draw(Overlay.GetImageData(), false, Overlay.GetPositionX(), Overlay.GetPositionY());
+				Overlay.HasBeenDrawn= true;
+			}
+
+			foreach( var text in TextOverlays)
+			{
+				text.Write();
 			}
 
 			currentMessage.Write();
+			userCursorPosition = currentMessage.GetCursorPosition() + 2;
 
-			//TODO: Remove when actually handling user input
-			Console.SetCursorPosition(0, 0);
-
+			Console.SetCursorPosition( USER_INTERFACE_ORIGIN_X, userCursorPosition );
 			needsUpdate = false;
 		}
 
 		public void SetBackground(Background background)
 		{
-			currentBackground = background;
+			Background = background;
 			needsUpdate = true;
 		}
 
-		public void SetOverlay(ImageOverlay overlay)
+		public void SetOverlay(Overlay overlay)
 		{
-			currentOverlay = overlay;
+			Overlay = overlay;
 			needsUpdate = true;
 		}
 
@@ -73,6 +84,26 @@ namespace MyNeighbor
 		{
 			userInterfaceBackground= ui;
 			needsUpdate = true;
+		}
+
+		public void AddTextOverlay( string text, int x, int y )
+		{
+			if( text.Length > MAX_TEXT_OVERLAY_LENGTH)
+			{
+				TextOverlays.Add(new TextMessage($"OVERLAY TEXT LONGER THAN {MAX_TEXT_OVERLAY_LENGTH}:", 2, 2));
+				TextOverlays.Add(new TextMessage(text, 2, 3));
+			}
+			else
+			if (( x+ text.Length ) <= MAX_SCREENSPACE_X && y <= MAX_SCREENSPACE_Y)
+			{
+				TextOverlays.Add(new TextMessage(text, x, y));
+			}
+			else
+			if( (x + text.Length) >= MAX_SCREENSPACE_X && y <= MAX_SCREENSPACE_Y)
+			{
+				int xOffset = MAX_SCREENSPACE_X - ( text.Length );
+				TextOverlays.Add(new TextMessage(text, xOffset, y));
+			}
 		}
 
 		public void SetMessage(string message)
@@ -117,7 +148,8 @@ namespace MyNeighbor
 					if (imageData[h, w] == 0)
 						Console.Write(Black);
 				}
-				Console.Write('\n');
+				if( h != (imageData.GetLength(0) - 1))
+					Console.Write('\n');
 			}
 
 			if(!consecutiveOutput)
