@@ -4,7 +4,7 @@
 
 namespace MyNeighbor
 {
-	class TextMessage
+	public class TextMessage
 	{
 		static int MAX_CHARACTERS_PER_LINE = 110;
 
@@ -29,12 +29,10 @@ namespace MyNeighbor
 		public void ChangeMessage(string message)
 		{
 			_message = message;
+			_words = _message.Split(" ");
 		}
 
-		public int GetCursorPosition()
-		{
-			return finalCursorPositionY;
-		}
+		public int CursorPosition => finalCursorPositionY;
 
 		public void Write()
 		{
@@ -44,24 +42,36 @@ namespace MyNeighbor
 			int lines = 0;
 			int lineLength = 0;
 
-			foreach( var word in _words )
+			foreach(var word in _words)
 			{
-				lineLength += word.Length + 1;
+				if(word != "[newline]")
+					lineLength += word.Length + 1;
 
-				if ( lineLength < MAX_CHARACTERS_PER_LINE)
+				if ( lineLength < MAX_CHARACTERS_PER_LINE )
 				{
-					Console.Write(word);
+					if (word == "[newline]")
+					{
+						++lines;
+						Console.SetCursorPosition(_positionX, _positionY + lines);
+						lineLength= 0;
+					}
+					else
+					{
+						Console.Write(word);
 
-					if( word != _words.Last())
-						Console.Write(" ");
+						if (word != _words.Last())
+							Console.Write(" ");
+					}
 				}
 				else
 				{
 					++lines;
-					Console.Write("\n");
 					Console.SetCursorPosition(_positionX, _positionY + lines);
 					Console.Write(word);
-					Console.Write(" ");
+
+					if (word != _words.Last())
+						Console.Write(" ");
+
 					lineLength = word.Length;
 				}
 			}

@@ -20,20 +20,10 @@ namespace MyNeighbor
 			HasBeenDrawn = false;
 		}
 
-		public int[,] GetImageData()
-		{
-			return _imageData;
-		}
+		public int[,] ImageData => _imageData;
+		public int PositionX => _positionX;
+		public int PositionY => _positionY;
 
-		public int GetPositionX()
-		{
-			return _positionX;
-		}
-
-		public int GetPositionY()
-		{
-			return _positionY;
-		}
 
 		public void SetPosition(int x, int y)
 		{
