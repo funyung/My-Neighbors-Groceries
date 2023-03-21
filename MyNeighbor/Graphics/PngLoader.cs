@@ -21,7 +21,7 @@ namespace MyNeighbor
 			{
 				using Image<L8> backgroundImage = Image.Load<L8>(filename);
 
-				if (backgroundImage.Height <= MAX_BACKGROUND_HEIGHT || backgroundImage.Width <= MAX_BACKGROUND_WIDTH)
+				if (backgroundImage.Height <= MAX_BACKGROUND_HEIGHT && backgroundImage.Width <= MAX_BACKGROUND_WIDTH)
 				{
 					return GetPixelLuminance(backgroundImage, MAX_BACKGROUND_HEIGHT, MAX_BACKGROUND_WIDTH);
 				}
@@ -36,15 +36,13 @@ namespace MyNeighbor
 
 		public static int[,] LoadOverlay(string filename)
 		{
-			int[,] pixelLuminance = new int[MAX_OVERLAY_HEIGHT, MAX_OVERLAY_WIDTH];
-
 			if (File.Exists(filename))
 			{
 				using Image<L8> overlayImage = Image.Load<L8>(filename);
 
-				if (overlayImage.Height <= MAX_OVERLAY_HEIGHT || overlayImage.Width <= MAX_OVERLAY_WIDTH)
+				if (overlayImage.Height <= MAX_OVERLAY_HEIGHT && overlayImage.Width <= MAX_OVERLAY_WIDTH)
 				{
-					return GetPixelLuminance(overlayImage, MAX_OVERLAY_WIDTH, MAX_OVERLAY_HEIGHT);
+					return GetPixelLuminance(overlayImage, MAX_OVERLAY_HEIGHT, MAX_OVERLAY_WIDTH);
 				}
 				else
 				{
@@ -61,7 +59,7 @@ namespace MyNeighbor
 			{
 				using Image<L8> uiImage = Image.Load<L8>(filename);
 
-				if (uiImage.Height <= MAX_UI_HEIGHT || uiImage.Width <= MAX_UI_WIDTH)
+				if (uiImage.Height <= MAX_UI_HEIGHT && uiImage.Width <= MAX_UI_WIDTH)
 				{
 					return GetPixelLuminance(uiImage, MAX_UI_HEIGHT, MAX_UI_WIDTH);
 				}

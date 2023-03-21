@@ -1,15 +1,18 @@
 ﻿/* Description:
- * Takes background and overlay graphics, and outputs it to the console with a UI under it for questions and user input
+ * Takes background graphic,overlay graphics, and UI background graphic. 
+ * Also stores a message for asking or telling the user something.
  */
+using System.Runtime.InteropServices;
+
 namespace MyNeighbor
 {
     public class FrameBuffer
 	{
-		static string White		= "  ";
-		static string LightGrey	= "░░";
-		static string Grey		= "▒▒";
-		static string DarkGrey	= "▒▒";
-		static string Black		= "██";
+		static string _white		= "  ";
+		static string _lightGray	= "░░";
+		static string _gray			= "▒▒";
+		static string _darkGray		= "▒▒";
+		static string _black		= "██";
 
 		public const int MAX_SCREENSPACE_X = 128;
 		public const int MAX_SCREENSPACE_Y = 64;
@@ -17,102 +20,129 @@ namespace MyNeighbor
 		public const int USER_INTERFACE_ORIGIN_X = 8;
 		public const int USER_INTERFACE_ORIGIN_Y = 48;
 
-		private Background Background;
-		private Overlay? Overlay;
-		private List<TextMessage> TextOverlays;
-		private int[,] userInterfaceBackground;
+		private Background _background;
+		private Overlay? _overlay;
+		private List<TextMessage> _textOverlays;
+		private int[,] _userInterfaceBackground;
 
-		private TextMessage currentMessage;
-		private int userCursorPosition;
+		private TextMessage _currentMessage;
+		private int _userCursorPosition;
 
-		private int lastCursorX;
-		private int lastCursorY;
+		private int _lastCursorX;
+		private int _lastCursorY;
 
 		public bool needsUpdate;
+		private bool _initialStart;
 
 		public FrameBuffer()
 		{
 			//Set Title Screen
-			Background = new Background("gfx/0bg_title.png");
-			userInterfaceBackground = PngLoader.LoadUI("gfx/0bg_ui.png");
+			_background = new Background("gfx/0bg_title.png");
+			_userInterfaceBackground = PngLoader.LoadUI("gfx/0bg_ui.png");
 
-			TextOverlays = new List<TextMessage>();
+			_textOverlays = new List<TextMessage>();
 
-			currentMessage = new TextMessage("Have you seen my neighbor? It seems like they never bring in any groceries... Have you seen my neighbor? It seems like they never bring in any groceries...  Have you seen my neighbor? It seems like they never bring in any groceries...  Have you seen my neighbor? It seems like they never bring in any groceries... ");
+			_currentMessage = new TextMessage("Have you seen my neighbor? [newline] " +
+											"It seems like they never bring in any groceries...  [newline] " +
+											"Do they even eat? What could they possibly be buying?");
+
+			AddTextOverlay("[Space]: Start", 28, 53);
+			AddTextOverlay("[Esc]: Quit", 56, 53);
+			AddTextOverlay("[F1]: About", 80, 53);
 
 			needsUpdate = true;
-
+			_initialStart = true;
 		}
 
 		public void OutputImage()
 		{
-			Draw(Background.GetImageData(), true);
+			Console.SetCursorPosition(0, 0);
 
-			Draw(userInterfaceBackground, true);
+			Draw(_background.GetImageData(), true);
+			Draw(_userInterfaceBackground, true);
 
-			if (Overlay != null)
+			if (_overlay != null)
 			{
-				Draw(Overlay.GetImageData(), false, Overlay.GetPositionX(), Overlay.GetPositionY());
-				Overlay.HasBeenDrawn= true;
+				Draw(_overlay.ImageData, false, _overlay.PositionX, _overlay.PositionY);
+				_overlay.HasBeenDrawn= true;
 			}
 
-			foreach( var text in TextOverlays)
+			foreach(var text in _textOverlays)
 			{
 				text.Write();
 			}
 
-			currentMessage.Write();
-			userCursorPosition = currentMessage.GetCursorPosition() + 2;
+			_currentMessage.Write();
+			_userCursorPosition = _currentMessage.CursorPosition + 2;
 
-			Console.SetCursorPosition( USER_INTERFACE_ORIGIN_X, userCursorPosition );
+			if(_initialStart)
+			{
+				Console.SetCursorPosition(0, 0);
+				_initialStart = false;
+			}
+			else
+				Console.SetCursorPosition(USER_INTERFACE_ORIGIN_X, _userCursorPosition);
+
 			needsUpdate = false;
 		}
 
 		public void SetBackground(Background background)
-		{
-			Background = background;
+		{ 
+			_background = background;
 			needsUpdate = true;
 		}
 
 		public void SetOverlay(Overlay overlay)
 		{
-			Overlay = overlay;
+			_overlay = overlay;
 			needsUpdate = true;
 		}
 
 		public void SetUI(int[,] ui)
 		{
-			userInterfaceBackground= ui;
+			_userInterfaceBackground= ui;
 			needsUpdate = true;
 		}
 
 		public void AddTextOverlay( string text, int x, int y )
 		{
+			var positionInBounds = (x + text.Length) <= MAX_SCREENSPACE_X && y <= MAX_SCREENSPACE_Y;
+			var positionOutOfBounds = (x + text.Length) >= MAX_SCREENSPACE_X && y <= MAX_SCREENSPACE_Y;
+
 			if( text.Length > MAX_TEXT_OVERLAY_LENGTH)
 			{
-				TextOverlays.Add(new TextMessage($"OVERLAY TEXT LONGER THAN {MAX_TEXT_OVERLAY_LENGTH}:", 2, 2));
-				TextOverlays.Add(new TextMessage(text, 2, 3));
+				_textOverlays.Add(new TextMessage($"OVERLAY TEXT LONGER THAN {MAX_TEXT_OVERLAY_LENGTH}:", 2, 2));
+				_textOverlays.Add(new TextMessage(text, 2, 3));
 			}
 			else
-			if (( x+ text.Length ) <= MAX_SCREENSPACE_X && y <= MAX_SCREENSPACE_Y)
+			if(positionInBounds)
 			{
-				TextOverlays.Add(new TextMessage(text, x, y));
+				_textOverlays.Add(new TextMessage(text, x, y));
 			}
 			else
-			if( (x + text.Length) >= MAX_SCREENSPACE_X && y <= MAX_SCREENSPACE_Y)
+			if(positionOutOfBounds)
 			{
 				int xOffset = MAX_SCREENSPACE_X - ( text.Length );
-				TextOverlays.Add(new TextMessage(text, xOffset, y));
+				_textOverlays.Add(new TextMessage(text, xOffset, y));
 			}
+		}
+
+		public void ClearTextOverlays()
+		{
+			_textOverlays.Clear();
 		}
 
 		public void SetMessage(string message)
 		{
-			currentMessage.ChangeMessage(message);
+			_currentMessage.ChangeMessage(message);
+			needsUpdate = true;
 		}
 
 		public void Draw(int[,] imageData, bool consecutiveOutput, int x = 0, int y = 0)
 		{
+			Console.BackgroundColor = ConsoleColor.Gray;
+			Console.ForegroundColor = ConsoleColor.Black;
+
 			for (int h = 0; h < imageData.GetLength(0); h++)
 			{
 				if (!consecutiveOutput)
@@ -122,42 +152,43 @@ namespace MyNeighbor
 					
 				for (int w = 0; w < imageData.GetLength(1); w++)
 				{
-					Console.BackgroundColor = ConsoleColor.Gray;
-					Console.ForegroundColor = ConsoleColor.Black;
-
-					if (imageData[h, w] == 255)
-						Console.Write(White);
-					else
-					if (imageData[h, w] == 205)
-						Console.Write(LightGrey);
-					else
-					if (imageData[h, w] == 153)
-						Console.Write(Grey);
-					else
-					if (imageData[h, w] == 101)
-						Console.Write(DarkGrey);
-					else
-					if (imageData[h, w] == 50)
+					switch(imageData[h,w])
 					{
-						Console.BackgroundColor = ConsoleColor.DarkGray;
-						Console.ForegroundColor = ConsoleColor.Black;
-
-						Console.Write(DarkGrey);
+						case 255:
+							Console.Write(_white);
+							break;
+						case 205:
+							Console.Write(_lightGray);
+							break;
+						case 153:
+							Console.Write(_gray);
+							break;
+						case 101:
+							Console.Write(_darkGray);
+							break;
+						case 50:
+							Console.BackgroundColor = ConsoleColor.DarkGray;
+							Console.ForegroundColor = ConsoleColor.Black;
+							Console.Write(_darkGray);
+							Console.BackgroundColor = ConsoleColor.Gray;
+							Console.ForegroundColor = ConsoleColor.Black;
+							break;
+						case 0:
+							Console.Write(_black); 
+							break;
 					}
-					else
-					if (imageData[h, w] == 0)
-						Console.Write(Black);
+
+					if (w == (imageData.GetLength(1) - 1) && h < (imageData.GetLength(0) - 1))
+						Console.Write('\n');
 				}
-				if( h != (imageData.GetLength(0) - 1))
-					Console.Write('\n');
 			}
 
 			if(!consecutiveOutput)
-					Console.SetCursorPosition(lastCursorX, lastCursorY);
+					Console.SetCursorPosition(_lastCursorX, _lastCursorY);
 			else
 			{ 
-				lastCursorX = Console.GetCursorPosition().Left;
-				lastCursorY = Console.GetCursorPosition().Top;
+				_lastCursorX = Console.GetCursorPosition().Left;
+				_lastCursorY = Console.GetCursorPosition().Top;
 			}
 		}
 	}
