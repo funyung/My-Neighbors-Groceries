@@ -64,8 +64,6 @@
 						//TODO: Interact with Grocery class to search for user input for keys in it's dictionary of products.
 						break;
 				}
-
-				//Console.Clear();
 			}
 
 			Environment.Exit(0);
