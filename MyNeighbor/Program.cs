@@ -12,33 +12,37 @@
 		static void Main(string[] args)
 		{
 			FrameBuffer frame = new FrameBuffer();
-			int gameState = STARTUP_STATE;
+			int programState = STARTUP_STATE;
+			int lastState = STARTUP_STATE;
 
 			Console.SetWindowSize(129, 60);
 
-			while (gameState != SHUTDOWN_STATE)
+			while (programState != EXIT_STATE)
 			{
 				if (frame.needsUpdate)
 					frame.OutputImage();
 
-				switch (gameState)
+				switch (programState)
 				{
 					case STARTUP_STATE:
 						ConsoleKeyInfo userInput = Console.ReadKey();
 
-						if (userInput.Key == ConsoleKey.Escape)
+						if (userInput.Key == ConsoleKey.Q)
 						{
-							gameState = SHUTDOWN_STATE;
+							lastState = programState;
+							programState = SHUTDOWN_STATE;
+							frame.userQuit = true;
+							frame.needsUpdate = true;
 						}
 						else
-						if (userInput.Key == ConsoleKey.Spacebar)
+						if (userInput.Key == ConsoleKey.S)
 						{
-							gameState = RUNNING_STATE;
+							programState = RUNNING_STATE;
 							frame.ClearTextOverlays();
 							frame.needsUpdate = true;
 						}
 						else
-						if (userInput.Key == ConsoleKey.F1)
+						if (userInput.Key == ConsoleKey.A)
 						{
 							/*gameState = ABOUT_STATE;
 							frame.ClearTextOverlays();
@@ -54,14 +58,31 @@
 						frame.SetMessage( "I'm not sure what to think, I've lived by them for three years and have never seen them bring something back from a grocery trip. It's the oddest thing because I walk my dog at all hours of the day... [newline] " + 
 											"If they are buying groceries what do you think they might buy?");
 
-						gameState = INPUT_STATE;
-
+						lastState = programState;
+						programState = INPUT_STATE;
 						break;
+
 					case INPUT_STATE:
 						Console.BackgroundColor = ConsoleColor.Black;
 						Console.ForegroundColor = ConsoleColor.Green;
 						Console.ReadLine();
 						//TODO: Interact with Grocery class to search for user input for keys in it's dictionary of products.
+
+						lastState = programState;
+						break;
+
+					case SHUTDOWN_STATE:
+						ConsoleKeyInfo exitInput = Console.ReadKey();
+
+						if (exitInput.Key == ConsoleKey.Y)
+							programState = EXIT_STATE;
+						else
+						if (exitInput.Key == ConsoleKey.N)
+						{
+							programState = lastState;
+							frame.userQuit = false;
+							frame.needsUpdate = true;
+						}
 						break;
 				}
 			}

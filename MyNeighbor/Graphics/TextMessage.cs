@@ -11,8 +11,8 @@ namespace MyNeighbor
 		private string _message;
 		private string[] _words;
 
-		private int _positionX;
-		private int _positionY;
+		private int _originX;
+		private int _originY;
 
 		private ConsoleColor _originalBackgroundColor;
 		private ConsoleColor _originalForegroundColor;
@@ -22,8 +22,8 @@ namespace MyNeighbor
 		{
 			_message = message;
 			_words = _message.Split(' ');
-			_positionY = posY;
-			_positionX = posX;
+			_originY = posY;
+			_originX = posX;
 		}
 
 		public void ChangeMessage(string message)
@@ -37,7 +37,7 @@ namespace MyNeighbor
 		public void Write()
 		{
 			SetColors();
-			Console.SetCursorPosition(_positionX, _positionY);
+			Console.SetCursorPosition(_originX, _originY);
 
 			int lines = 0;
 			int lineLength = 0;
@@ -52,7 +52,7 @@ namespace MyNeighbor
 					if (word == "[newline]")
 					{
 						++lines;
-						Console.SetCursorPosition(_positionX, _positionY + lines);
+						Console.SetCursorPosition(_originX, _originY + lines);
 						lineLength= 0;
 					}
 					else
@@ -66,7 +66,7 @@ namespace MyNeighbor
 				else
 				{
 					++lines;
-					Console.SetCursorPosition(_positionX, _positionY + lines);
+					Console.SetCursorPosition(_originX, _originY + lines);
 					Console.Write(word);
 
 					if (word != _words.Last())
@@ -76,7 +76,7 @@ namespace MyNeighbor
 				}
 			}
 
-			finalCursorPositionY = _positionY + lines;
+			finalCursorPositionY = _originY + lines;
 
 			ResetColors();
 		}

@@ -28,10 +28,14 @@ namespace MyNeighbor
 		private TextMessage _currentMessage;
 		private int _userCursorPosition;
 
+		private TextMessage _quitMessage;
+		private TextMessage _quitCommands;
+
 		private int _lastCursorX;
 		private int _lastCursorY;
 
 		public bool needsUpdate;
+		public bool userQuit;
 		private bool _initialStart;
 
 		public FrameBuffer()
@@ -46,19 +50,26 @@ namespace MyNeighbor
 											"It seems like they never bring in any groceries...  [newline] " +
 											"Do they even eat? What could they possibly be buying?");
 
-			AddTextOverlay("[Space]: Start", 28, 53);
-			AddTextOverlay("[Esc]: Quit", 56, 53);
-			AddTextOverlay("[F1]: About", 80, 53);
+			AddTextOverlay("[S]: Start", 28, 53);
+			AddTextOverlay("[Q]: Quit", 56, 53);
+			AddTextOverlay("[A]: About", 80, 53);
+
+			_quitMessage = new TextMessage("Are you sure you want to quit?", 50, 22);
+			_quitCommands = new TextMessage("(y/n)", 62, 23);
 
 			needsUpdate = true;
+			userQuit = false;
 			_initialStart = true;
 		}
 
 		public void OutputImage()
 		{
+			Console.BackgroundColor = ConsoleColor.Gray;
+			Console.ForegroundColor = ConsoleColor.Black;
 			Console.SetCursorPosition(0, 0);
 
 			Draw(_background.GetImageData(), true);
+			Console.Write("\n"); //HACK
 			Draw(_userInterfaceBackground, true);
 
 			if (_overlay != null)
@@ -75,10 +86,17 @@ namespace MyNeighbor
 			_currentMessage.Write();
 			_userCursorPosition = _currentMessage.CursorPosition + 2;
 
-			if(_initialStart)
+			if (_initialStart)
 			{
 				Console.SetCursorPosition(0, 0);
 				_initialStart = false;
+			}
+			else
+			if (userQuit)
+			{
+				_quitMessage.Write();
+				_quitCommands.Write();
+				Console.SetCursorPosition(0, 0);
 			}
 			else
 				Console.SetCursorPosition(USER_INTERFACE_ORIGIN_X, _userCursorPosition);
@@ -140,9 +158,6 @@ namespace MyNeighbor
 
 		public void Draw(int[,] imageData, bool consecutiveOutput, int x = 0, int y = 0)
 		{
-			Console.BackgroundColor = ConsoleColor.Gray;
-			Console.ForegroundColor = ConsoleColor.Black;
-
 			for (int h = 0; h < imageData.GetLength(0); h++)
 			{
 				if (!consecutiveOutput)
