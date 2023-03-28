@@ -73,9 +73,9 @@ namespace MyNeighbor
 
 		}
 
-		private static int[,] GetPixelLuminance(Image<L8> image, int y, int x)
+		private static int[,] GetPixelLuminance(Image<L8> image, int h, int w)
 		{
-			int[,] luminance = new int[y,x];
+			int[,] luminance = new int[h,w];
 
 			//Grab the luminance values of each pixel in our image
 			image.ProcessPixelRows(accessor =>

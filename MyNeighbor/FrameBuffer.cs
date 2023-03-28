@@ -72,7 +72,7 @@ namespace MyNeighbor
 			Console.Write("\n");
 			Draw(_userInterfaceBackground, true);
 
-			if (_overlay != null)
+			if (_overlay != null && _overlay.HasBeenDrawn == false)
 			{
 				Draw(_overlay.ImageData, false, _overlay.PositionX, _overlay.PositionY);
 				_overlay.HasBeenDrawn= true;
