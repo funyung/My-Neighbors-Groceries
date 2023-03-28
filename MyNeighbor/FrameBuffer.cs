@@ -35,7 +35,7 @@ namespace MyNeighbor
 		private int _lastCursorY;
 
 		public bool needsUpdate;
-		public bool userQuit;
+		public bool userQuitConfirmation;
 		private bool _initialStart;
 
 		public FrameBuffer()
@@ -43,7 +43,6 @@ namespace MyNeighbor
 			//Set Title Screen
 			_background = new Background("gfx/0bg_title.png");
 			_userInterfaceBackground = PngLoader.LoadUI("gfx/0bg_ui.png");
-
 			_textOverlays = new List<TextMessage>();
 
 			_currentMessage = new TextMessage("Have you seen my neighbor? [newline] " +
@@ -54,11 +53,12 @@ namespace MyNeighbor
 			AddTextOverlay("[Q]: Quit", 56, 53);
 			AddTextOverlay("[A]: About", 80, 53);
 
+			needsUpdate = true;
+
+			userQuitConfirmation = false;
 			_quitMessage = new TextMessage("Are you sure you want to quit?", 50, 22);
 			_quitCommands = new TextMessage("(y/n)", 62, 23);
 
-			needsUpdate = true;
-			userQuit = false;
 			_initialStart = true;
 		}
 
@@ -69,7 +69,7 @@ namespace MyNeighbor
 			Console.SetCursorPosition(0, 0);
 
 			Draw(_background.GetImageData(), true);
-			Console.Write("\n"); //HACK
+			Console.Write("\n");
 			Draw(_userInterfaceBackground, true);
 
 			if (_overlay != null)
@@ -92,7 +92,7 @@ namespace MyNeighbor
 				_initialStart = false;
 			}
 			else
-			if (userQuit)
+			if (userQuitConfirmation)
 			{
 				_quitMessage.Write();
 				_quitCommands.Write();

@@ -1,10 +1,12 @@
-﻿namespace MyNeighbor
+﻿using System.Runtime.InteropServices;
+
+namespace MyNeighbor
 {
 	internal class Program
 	{
 		const int STARTUP_STATE = 0;
 		const int ABOUT_STATE = 1;
-		const int RUNNING_STATE = 2;
+		const int DRAW_STATE = 2;
 		const int INPUT_STATE = 3;
 		const int SHUTDOWN_STATE = 4;
 		const int EXIT_STATE = 5;
@@ -12,10 +14,14 @@
 		static void Main(string[] args)
 		{
 			FrameBuffer frame = new FrameBuffer();
+			Grocery inventory = new Grocery();
+
 			int programState = STARTUP_STATE;
 			int lastState = STARTUP_STATE;
 
-			Console.SetWindowSize(129, 60);
+			var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+			if(isWindows)
+				Console.SetWindowSize(129, 60);
 
 			while (programState != EXIT_STATE)
 			{
@@ -29,15 +35,14 @@
 
 						if (userInput.Key == ConsoleKey.Q)
 						{
-							lastState = programState;
 							programState = SHUTDOWN_STATE;
-							frame.userQuit = true;
+							frame.userQuitConfirmation = true;
 							frame.needsUpdate = true;
 						}
 						else
 						if (userInput.Key == ConsoleKey.S)
 						{
-							programState = RUNNING_STATE;
+							programState = DRAW_STATE;
 							frame.ClearTextOverlays();
 							frame.needsUpdate = true;
 						}
@@ -48,12 +53,14 @@
 							frame.ClearTextOverlays();
 							frame.needsUpdate = true;*/
 						}
+
+						lastState = programState;
 						break;
 
 					case ABOUT_STATE:
 						break;
 
-					case RUNNING_STATE:
+					case DRAW_STATE:
 						frame.SetBackground(new Background("gfx/egg.png")); //TEST
 						frame.SetMessage( "I'm not sure what to think, I've lived by them for three years and have never seen them bring something back from a grocery trip. It's the oddest thing because I walk my dog at all hours of the day... [newline] " + 
 											"If they are buying groceries what do you think they might buy?");
@@ -65,22 +72,38 @@
 					case INPUT_STATE:
 						Console.BackgroundColor = ConsoleColor.Black;
 						Console.ForegroundColor = ConsoleColor.Green;
-						Console.ReadLine();
-						//TODO: Interact with Grocery class to search for user input for keys in it's dictionary of products.
+
+						if (inventory.SearchProducts(Console.ReadLine()))
+						{
+							var product = inventory.GetFoundProduct();
+							frame.SetBackground(product.Image);
+							frame.SetMessage(product.Response);
+							frame.AddTextOverlay(product.TextOverlay, 50, 20);
+						}
+						else
+						{
+							frame.ClearTextOverlays();
+							programState = DRAW_STATE;
+						}
 
 						lastState = programState;
 						break;
 
 					case SHUTDOWN_STATE:
-						ConsoleKeyInfo exitInput = Console.ReadKey();
+						Console.BackgroundColor = ConsoleColor.Black;
+						Console.ForegroundColor = ConsoleColor.Red;
 
+						ConsoleKeyInfo exitInput = Console.ReadKey();
 						if (exitInput.Key == ConsoleKey.Y)
+						{
+							Console.Clear();
 							programState = EXIT_STATE;
+						}
 						else
 						if (exitInput.Key == ConsoleKey.N)
 						{
 							programState = lastState;
-							frame.userQuit = false;
+							frame.userQuitConfirmation = false;
 							frame.needsUpdate = true;
 						}
 						break;
