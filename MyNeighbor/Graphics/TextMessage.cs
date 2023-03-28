@@ -85,8 +85,7 @@ namespace MyNeighbor
 		{
 			_originalBackgroundColor = Console.BackgroundColor;
 			_originalForegroundColor = Console.ForegroundColor;
-			Console.BackgroundColor = ConsoleColor.Black;
-			Console.ForegroundColor = ConsoleColor.White;
+			Console.ResetColor();
 		}
 
 		private void ResetColors()

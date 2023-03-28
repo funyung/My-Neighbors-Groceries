@@ -9,6 +9,7 @@ namespace MyNeighbor
 		private Dictionary<string, string> _productList;
 		private List<Product> _products;
 		private Product _currentFoundProduct;
+		public string lastSearchedProduct;
 
 		public Grocery()
 		{
@@ -20,9 +21,11 @@ namespace MyNeighbor
 
 		public bool SearchProducts( string input)
 		{
+			lastSearchedProduct = input;
+
 			if( _productList.ContainsKey(input.ToLower()) )
 			{
-				string productId = _productList[input];
+				string productId = _productList[input.ToLower()];
 
 				foreach( var product in _products )
 				{

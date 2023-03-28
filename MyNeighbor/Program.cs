@@ -18,6 +18,8 @@ namespace MyNeighbor
 
 			int programState = STARTUP_STATE;
 			int lastState = STARTUP_STATE;
+			bool initialStartup = true;
+			bool invalidResponse = false;
 
 			var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 			if(isWindows)
@@ -35,35 +37,48 @@ namespace MyNeighbor
 
 						if (userInput.Key == ConsoleKey.Q)
 						{
+							lastState = programState;
 							programState = SHUTDOWN_STATE;
 							frame.userQuitConfirmation = true;
-							frame.needsUpdate = true;
 						}
 						else
 						if (userInput.Key == ConsoleKey.S)
 						{
+							lastState = programState;
 							programState = DRAW_STATE;
 							frame.ClearTextOverlays();
-							frame.needsUpdate = true;
 						}
 						else
 						if (userInput.Key == ConsoleKey.A)
 						{
-							/*gameState = ABOUT_STATE;
-							frame.ClearTextOverlays();
-							frame.needsUpdate = true;*/
+							/* lastState = programState;
+							programState = ABOUT_STATE;
+							frame.ClearTextOverlays();*/
 						}
 
-						lastState = programState;
+						frame.needsUpdate = true;
 						break;
 
 					case ABOUT_STATE:
 						break;
 
 					case DRAW_STATE:
-						frame.SetBackground(new Background("gfx/egg.png")); //TEST
-						frame.SetMessage( "I'm not sure what to think, I've lived by them for three years and have never seen them bring something back from a grocery trip. It's the oddest thing because I walk my dog at all hours of the day... [newline] " + 
-											"If they are buying groceries what do you think they might buy?");
+						if(initialStartup)
+						{
+							frame.SetBackground(new Background("gfx/egg.png")); //TEMP
+							frame.SetMessage("I'm not sure what to think, I've lived by them for three years and have never seen them bring something back from a grocery trip. It's the oddest thing because I walk my dog at all hours of the day... [newline] " +
+												"If they are buying groceries what do you think they might buy?");
+							initialStartup = false;
+						}
+
+						if(invalidResponse)
+						{
+							frame.SetBackground(new Background("gfx/candy.png")); //TEMP
+							frame.SetOverlay(new Overlay("gfx/0overlay_no.png", 75, 2));
+							frame.SetMessage($"Obviously, no functioning member of society would ever buy {inventory.lastSearchedProduct}! [newline] " +
+												"What other things do you think they might buy?");
+							invalidResponse = false;
+						}
 
 						lastState = programState;
 						programState = INPUT_STATE;
@@ -83,6 +98,7 @@ namespace MyNeighbor
 						else
 						{
 							frame.ClearTextOverlays();
+							invalidResponse = true;
 							programState = DRAW_STATE;
 						}
 
@@ -106,6 +122,8 @@ namespace MyNeighbor
 							frame.userQuitConfirmation = false;
 							frame.needsUpdate = true;
 						}
+
+						Console.ResetColor();
 						break;
 				}
 			}
