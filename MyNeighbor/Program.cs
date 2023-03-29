@@ -88,7 +88,21 @@ namespace MyNeighbor
 						Console.BackgroundColor = ConsoleColor.Black;
 						Console.ForegroundColor = ConsoleColor.Green;
 
-						if (inventory.SearchProducts(Console.ReadLine()))
+						var input = Console.ReadLine();
+
+						if (input.ToLower() == "quit" || 
+							input.ToLower() == "exit" || 
+							input.ToLower() == "nothing" || 
+							input.ToLower() == "fuck off")
+						{
+							frame.userQuitConfirmation = true;
+							frame.needsUpdate = true;
+							lastState = programState;
+							programState = SHUTDOWN_STATE;
+							break;
+						}
+						
+						if (inventory.SearchProducts(input))
 						{
 							var product = inventory.GetFoundProduct();
 							frame.SetBackground(product.Image);
@@ -99,10 +113,9 @@ namespace MyNeighbor
 						{
 							frame.ClearTextOverlays();
 							invalidResponse = true;
+							lastState = programState;
 							programState = DRAW_STATE;
 						}
-
-						lastState = programState;
 						break;
 
 					case SHUTDOWN_STATE:
