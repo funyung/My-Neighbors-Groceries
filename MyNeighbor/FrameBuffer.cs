@@ -158,16 +158,19 @@ namespace MyNeighbor
 
 		public void Draw(int[,] imageData, bool consecutiveOutput, int x = 0, int y = 0)
 		{
-			for (int h = 0; h < imageData.GetLength(0); h++)
+			var image_height = imageData.GetLength(0);
+			var image_width = imageData.GetLength(1);
+
+			for (int row = 0; row < image_height; row++)
 			{
 				if (!consecutiveOutput)
 				{
-					Console.SetCursorPosition(x, y + h);
+					Console.SetCursorPosition(x, y + row);
 				}
 					
-				for (int w = 0; w < imageData.GetLength(1); w++)
+				for (int column = 0; column < image_width; column++)
 				{
-					switch(imageData[h,w])
+					switch(imageData[row,column])
 					{
 						case 255:
 							Console.Write(_white);
@@ -193,7 +196,7 @@ namespace MyNeighbor
 							break;
 					}
 
-					if (w == (imageData.GetLength(1) - 1) && h < (imageData.GetLength(0) - 1))
+					if (column == (imageData.GetLength(1) - 1) && row < (imageData.GetLength(0) - 1))
 						Console.Write('\n');
 				}
 			}
