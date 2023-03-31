@@ -25,7 +25,7 @@ namespace MyNeighbor
 			var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 			if(isWindows)
 			{
-				Console.SetWindowSize(129, 60);
+				Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 			}
 
 			while (programState != EXIT_STATE)
