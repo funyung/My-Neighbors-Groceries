@@ -63,6 +63,9 @@
     <None Update="gfx\pizza.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="gfx\question.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="gfx\snack_cake.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
