@@ -51,7 +51,7 @@ namespace MyNeighbor
 
 			AddTextOverlay("[S]: Start", 28, 53);
 			AddTextOverlay("[Q]: Quit", 56, 53);
-			AddTextOverlay("[A]: About", 80, 53);
+			//AddTextOverlay("[A]: About", 80, 53);
 
 			needsUpdate = true;
 

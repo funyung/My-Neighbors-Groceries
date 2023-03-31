@@ -1,0 +1,11 @@
+The main thing is making an image that is a 64x44 PNG file with an indexed color palette (palette.act)
+
+My process, done with Adobe Photoshop CS6 (Should be similar in newer versions)
+-----------------------------------
+Adjust Brightness to roughly -32
+Adjust Contrast to roughly +64
+Biliniar Image Scale to 64 width or 44 height, depending on the picture.
+Adjust Canvas Size to to fill out 64 width or 44 height, based on your scaling.
+Convert to Indexed Color with 6 colors using pallette.act 
+Adjust diffusion for image clarity
+Save as .png with no Compression and no Interlacing

@@ -34,10 +34,9 @@ namespace MyNeighbor
 			_products.Add(new Pizza());
 			_products.Add(new Soda());
 			_products.Add(new Vegetable());
-			
 		}
 
-		public bool SearchProducts( string input)
+		public bool SearchProducts(string input)
 		{
 			lastSearchedProduct = input;
 

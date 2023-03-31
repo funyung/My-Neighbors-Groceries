@@ -51,34 +51,35 @@ namespace MyNeighbor
 							programState = DRAW_STATE;
 							frame.ClearTextOverlays();
 						}
-						else
+						/*else
 						if (userInput.Key == ConsoleKey.A)
 						{
-							/* lastState = programState;
+							 lastState = programState;
 							programState = ABOUT_STATE;
-							frame.ClearTextOverlays();*/
-						}
+							frame.ClearTextOverlays();
+						}*/
 
 						frame.needsUpdate = true;
 						break;
 
-					case ABOUT_STATE:
-						break;
+					//case ABOUT_STATE:
+						//break;
 
 					case DRAW_STATE:
-						if(initialStartup)
+						if (initialStartup)
 						{
-							frame.SetBackground(new Background("gfx/egg.png")); //TEMP
+							frame.SetBackground(new Background("gfx/question.png"));
 							frame.SetMessage("I'm not sure what to think, I've lived by them for three years and have never seen them bring something back from a grocery trip. It's the oddest thing because I walk my dog at all hours of the day... [newline] " +
 												"If they are buying groceries what's something you think they might buy?");
 							initialStartup = false;
 						}
 
-						if(invalidResponse)
+						if (invalidResponse)
 						{
-							frame.SetBackground(new Background("gfx/chocolate.png")); //TEMP
+							frame.SetBackground(new Background("gfx/snack_cake.png"));
 							frame.SetOverlay(new Overlay("gfx/0overlay_no.png", 75, 2));
 							frame.SetMessage($"Obviously, no functioning member of society would ever buy {inventory.lastSearchedProduct}! [newline] " +
+												"Plus I'm not sure they even sell that at our local grocery [newline] " +
 												"What's another thing you think they might buy?");
 							invalidResponse = false;
 						}
@@ -93,10 +94,10 @@ namespace MyNeighbor
 
 						var input = Console.ReadLine();
 
-						if (input.ToLower() == "quit" || 
-							input.ToLower() == "exit" || 
-							input.ToLower() == "nothing" || 
-							input.ToLower() == "fuck off")
+						if (input.ToLower() == "quit" ||
+							input.ToLower() == "exit" ||
+							input.ToLower() == "nothing" ||
+							input.ToLower() == "no")
 						{
 							frame.userQuitConfirmation = true;
 							frame.needsUpdate = true;
