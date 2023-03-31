@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MyNeighbor
 {
@@ -23,7 +24,9 @@ namespace MyNeighbor
 
 			var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 			if(isWindows)
+			{
 				Console.SetWindowSize(129, 60);
+			}
 
 			while (programState != EXIT_STATE)
 			{
@@ -67,16 +70,16 @@ namespace MyNeighbor
 						{
 							frame.SetBackground(new Background("gfx/egg.png")); //TEMP
 							frame.SetMessage("I'm not sure what to think, I've lived by them for three years and have never seen them bring something back from a grocery trip. It's the oddest thing because I walk my dog at all hours of the day... [newline] " +
-												"If they are buying groceries what do you think they might buy?");
+												"If they are buying groceries what's something you think they might buy?");
 							initialStartup = false;
 						}
 
 						if(invalidResponse)
 						{
-							frame.SetBackground(new Background("gfx/candy.png")); //TEMP
+							frame.SetBackground(new Background("gfx/chocolate.png")); //TEMP
 							frame.SetOverlay(new Overlay("gfx/0overlay_no.png", 75, 2));
 							frame.SetMessage($"Obviously, no functioning member of society would ever buy {inventory.lastSearchedProduct}! [newline] " +
-												"What other things do you think they might buy?");
+												"What's another thing you think they might buy?");
 							invalidResponse = false;
 						}
 
@@ -107,7 +110,7 @@ namespace MyNeighbor
 							var product = inventory.GetFoundProduct();
 							frame.SetBackground(product.Image);
 							frame.SetMessage(product.Response);
-							frame.AddTextOverlay(product.TextOverlay, 50, 20);
+							frame.AddTextOverlay(product.TextOverlay, product.TextPositionX, product.TextPositionY);
 						}
 						else
 						{

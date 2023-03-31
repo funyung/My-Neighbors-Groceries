@@ -1,10 +1,9 @@
-﻿/* Description:
- * Holds the integer values for an background type image to be written to the console and has a maximum resolution for the drawing area
- */
-
-namespace MyNeighbor
+﻿namespace MyNeighbor
 {
-    public class Background
+	/// <summary>
+	/// Holds the pixel luminance values for a background type image to be written to the console
+	/// </summary>
+	public class Background
     {
         private int[,] _imageData = new int[44,64];
 

@@ -1,8 +1,8 @@
-﻿/* Description:
- * Static class to contain error image data for Backgrounds and Overlays incase an image cannot be loaded
- */
-namespace MyNeighbor
+﻿namespace MyNeighbor
 {
+	/// <summary>
+	/// Static class to contain error image data for Backgrounds and Overlays incase an image cannot be loaded
+	/// </summary>
 	static class UnableToLoadImage
 	{
 		public static int[,] Background()

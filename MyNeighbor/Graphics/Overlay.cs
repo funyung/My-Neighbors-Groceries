@@ -1,9 +1,8 @@
-﻿/* Description:
- * Holds the integer values for an overlay type image with a limited resolution to be drawn over top of the background after it is displayed
- */
-
-namespace MyNeighbor
+﻿namespace MyNeighbor
 {
+	/// <summary>
+	/// Holds the pixel luminance values for an overlay type image requiring a limited resolution to be drawn over top of the background after that is displayed
+	/// </summary>
 	public class Overlay
 	{
 		private int[,] _imageData = new int[24, 10];

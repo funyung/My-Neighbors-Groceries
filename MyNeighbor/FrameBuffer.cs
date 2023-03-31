@@ -1,12 +1,12 @@
-﻿/* Description:
- * Takes background graphic,overlay graphics, and UI background graphic. 
- * Also stores a message for asking or telling the user something.
- */
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace MyNeighbor
 {
-    public class FrameBuffer
+	/// <summary>
+	/// Takes background graphic,overlay graphics, and UI background graphic. 
+	/// Also stores a message for asking or telling the user something.
+	/// </summary>
+	public class FrameBuffer
 	{
 		static string _white		= "  ";
 		static string _lightGray	= "░░";

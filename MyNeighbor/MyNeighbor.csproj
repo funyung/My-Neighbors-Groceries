@@ -21,7 +21,7 @@
     <None Update="gfx\0overlay_no.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="gfx\candy.png">
+    <None Update="gfx\chocolate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="gfx\egg.png">

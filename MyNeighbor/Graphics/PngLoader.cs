@@ -1,11 +1,11 @@
-﻿/* Description:
- * Utilizes ImageSharp to processes loaded PNG files into integer arrays and creates an IDrawable element with it
- */
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace MyNeighbor
 {
+	/// <summary>
+	/// Utilizes ImageSharp to processes loaded PNG files into integer arrays and creates an array of pixel luminance values with it
+	/// </summary>
 	public static class PngLoader
 	{
 		static int MAX_BACKGROUND_HEIGHT = 44;

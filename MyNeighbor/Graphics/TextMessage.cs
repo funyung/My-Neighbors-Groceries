@@ -1,9 +1,8 @@
-﻿/* Description:
- * Holds the text string for a text output to console and manages where new lines need to be placed based on specified length 
- */
-
-namespace MyNeighbor
+﻿namespace MyNeighbor
 {
+	/// <summary>
+	/// Holds the text string for a text output to console and manages where new lines need to be placed based on specified length 
+	/// </summary>
 	public class TextMessage
 	{
 		static int MAX_CHARACTERS_PER_LINE = 110;

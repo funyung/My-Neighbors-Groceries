@@ -1,12 +1,28 @@
-﻿
-namespace MyNeighbor
+﻿namespace MyNeighbor
 {
 	class Product
 	{
+		internal const int DEFAULT_TEXTOVERLAY_X = 110;
+		internal const int DEFAULT_TEXTOVERLAY_Y = 42;
+
+		public string _id;
 		internal Background? _image;
 		internal string _response;
 		internal string _textOverlay;
-		public string _id;
+		internal int _textOverlayPositionX;
+		internal int _textOverlayPositionY;
+
+		public string ID
+		{
+			get
+			{
+				return _id;
+			}
+			set
+			{
+				_id = value;
+			}
+		}
 
 		public Background Image
 		{
@@ -44,15 +60,27 @@ namespace MyNeighbor
 			}
 		}
 
-		public string ID
+		public int TextPositionX
 		{
 			get
 			{
-				return _id;
+				return _textOverlayPositionX;
 			}
-			set 
+			set
 			{
-				_id = value; 
+				_textOverlayPositionX = value;
+			}
+		}
+
+		public int TextPositionY
+		{
+			get
+			{
+				return _textOverlayPositionY;
+			}
+			set
+			{
+				_textOverlayPositionY = value;
 			}
 		}
 	}
