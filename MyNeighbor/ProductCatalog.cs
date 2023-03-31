@@ -3,11 +3,11 @@
 	/// <summary>
 	/// Static class for building dictionary for specific product strings to generic product classes
 	/// </summary>
-	public static class ProductCatalogue
+	public static class ProductCatalog
 	{
 		private static Dictionary<string, string> _products;
 
-		static ProductCatalogue()
+		static ProductCatalog()
 		{
 			_products = new Dictionary<string, string>();
 		}

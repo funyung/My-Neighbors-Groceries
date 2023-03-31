@@ -15,7 +15,7 @@ namespace MyNeighbor
 
 		public Grocery()
 		{
-			_productList = ProductCatalogue.BuildCatalogue();
+			_productList = ProductCatalog.BuildCatalogue();
 			_products = new List<Product>();
 
 			_products.Add(new Eggs());
