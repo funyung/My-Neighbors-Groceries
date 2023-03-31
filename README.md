@@ -15,7 +15,7 @@ Project Features:
 *Not sure if this applies for how I visualized a PNG file
 
 Notes on running this program:
-It targets Windows and Windows 10 and below should run flawlessly, however on Windows 11 due to a change in how the console works you must do the following:
+It targets Windows so Windows 10 and below should run flawlessly, however on Windows 11 due to a change in how the console works you must do the following:
 1. Change your terminal font to Consolas:
 https://pureinfotech.com/change-font-face-windows-terminal/
 2. Change the terminal output to Windows Console Host. This can be done in Settings > Privacy > For Developers > Terminal.
