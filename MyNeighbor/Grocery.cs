@@ -15,11 +15,26 @@ namespace MyNeighbor
 
 		public Grocery()
 		{
-			_productList = ProductCatalog.BuildCatalogue();
+			_productList = ProductCatalog.BuildCatalog();
 			_products = new List<Product>();
 
-			_products.Add(new Eggs());
+			_products.Add(new Beans());
+			_products.Add(new Bread());
+			_products.Add(new Butter());
+			_products.Add(new Candy());
+			_products.Add(new Cheese());
 			_products.Add(new Chocolate());
+			_products.Add(new Coffee());
+			_products.Add(new Eggs());
+			_products.Add(new Fish());
+			_products.Add(new Fruit());
+			_products.Add(new Juice());
+			_products.Add(new Meat());
+			_products.Add(new Milk());
+			_products.Add(new Pizza());
+			_products.Add(new Soda());
+			_products.Add(new Vegetable());
+			
 		}
 
 		public bool SearchProducts( string input)

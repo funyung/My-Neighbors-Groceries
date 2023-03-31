@@ -7,7 +7,7 @@
 			_id = "egg";
 			_image = new Background("gfx/egg.png");
 			_response = "Eggs suck";
-			_textOverlay = "This is Eggs";
+			_textOverlay = "This is eggs";
 			_textOverlayPositionX = DEFAULT_TEXTOVERLAY_X;
 			_textOverlayPositionY = DEFAULT_TEXTOVERLAY_Y;
 		}

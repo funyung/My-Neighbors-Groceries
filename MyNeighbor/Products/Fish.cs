@@ -1,13 +1,13 @@
 ﻿namespace MyNeighbor
 {
-	class Bread : Product
+	class Fish : Product
 	{
-		public Bread()
+		public Fish()
 		{
-			_id = "bread";
+			_id = "fish";
 			_image = new Background("gfx/snack_cake.png");
 			_response = "CHANGEME";
-			_textOverlay = "This is bread";
+			_textOverlay = "This is fish";
 			_textOverlayPositionX = DEFAULT_TEXTOVERLAY_X;
 			_textOverlayPositionY = DEFAULT_TEXTOVERLAY_Y;
 		}
