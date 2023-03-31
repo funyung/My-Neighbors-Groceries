@@ -5,7 +5,7 @@
 		public Vegetable()
 		{
 			_id = "vegetable";
-			_image = new Background("gfx/snack_cake.png");
+			_image = new Background("gfx/vegetable.png");
 			_response = "Ever since they started a garden in our courtyard they keep telling me how the vegetables at the store are fake... [newline] " +
 						"Honestly everything they grow is minature in size, it doesn't seem like much to cook with. [newline] " +
 						"What's something else they might buy?";

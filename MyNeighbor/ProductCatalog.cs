@@ -51,6 +51,7 @@
 			_products.Add("margarine", "butter");
 
 			//Candy
+			_products.Add("candy", "candy");
 			_products.Add("nerds", "candy");
 			_products.Add("nerds rope", "candy");
 			_products.Add("twizzlers", "candy");
@@ -139,6 +140,7 @@
 			_products.Add("organic eggs", "egg");
 
 			//Fish
+			_products.Add("fish", "fish");
 			_products.Add("salmon", "fish");
 			_products.Add("tuna", "fish");
 			_products.Add("canned tuna", "fish");
@@ -169,6 +171,7 @@
 			_products.Add("dragonfruits", "fruit");
 
 			//Juice
+			_products.Add("juice", "juice");
 			_products.Add("apple juice", "juice");
 			_products.Add("orange juice", "juice");
 			_products.Add("pineapple juice", "juice");
@@ -178,6 +181,7 @@
 			_products.Add("minute maid", "juice");
 
 			//Meat
+			_products.Add("meat", "meat");
 			_products.Add("turkey", "meat");
 			_products.Add("sliced turkey", "meat");
 			_products.Add("ham", "meat");

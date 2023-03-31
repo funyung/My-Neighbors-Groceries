@@ -108,6 +108,7 @@ namespace MyNeighbor
 						
 						if (inventory.SearchProducts(input))
 						{
+							frame.ClearTextOverlays();
 							var product = inventory.GetFoundProduct();
 							frame.SetBackground(product.Image);
 							frame.SetMessage(product.Response);
