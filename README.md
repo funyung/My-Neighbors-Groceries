@@ -10,9 +10,9 @@ Project Features:
 3. Create a dictionary or list, populate it with several values, retrieve at least one value, and use it in your program
 4. Read data from an external file, such as text, JSON, CSV, etc and use that data in your application
 5. Implement a regular expression (regex) to ensure a field either a phone number or an email address is always stored and displayed in the same format
--6. Visualize data in a graph, chart, or other visual representation of data
+> 6. Visualize data in a graph, chart, or other visual representation of data
 
-- Not sure if this applies for how I visualized a PNG file
+> Not sure if this applies for how I visualized a PNG file
 
 Notes on running this program:
 It targets Windows so Windows 10 and below should run flawlessly, however on Windows 11 due to a change in how the console works you must do the following:
